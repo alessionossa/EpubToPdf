@@ -33,7 +33,27 @@ class PdfEngine(object):
 
 			# Prevent conversion process from showing terminal updates
 
-			options = {'quiet': ''}
+			"""
+			options = {
+				'quiet': None,
+				'margin-bottom': '0',
+				'margin-left': '0',
+				'margin-right': '0',
+				'margin-top': '0'
+			}
+			"""
+			# 641/96*25,4 = 169.5979166667mm
+			options = {
+				'quiet': None,
+				'viewport-size': '641x908',
+				'page-width': '643px',
+				'page-height': '910px',
+				'margin-bottom': '0',
+				'margin-left': '0',
+				'margin-right': '0',
+				'margin-top': '0',
+				'disable-smart-shrinking': None
+			}
 
 			pdfkit.from_file(each, "{}.pdf".format(self.markup_files.index(each)),
 							 options=options)
