@@ -139,7 +139,6 @@ class GetEngine(object):
 			page_src = page_target.find('content')['src']
 			
 			file_path_match = re.match(r'.+\.[a-zA-Z]+', page_src)
-			print(page_src + ';' + str(file_path_match))
 			if not file_path_match:
 				continue
 			file_name = ntpath.basename(file_path_match.group())

@@ -85,10 +85,11 @@ class PdfEngine(object):
 				'margin-left': '0',
 				'margin-right': '0',
 				'margin-top': '0',
-				'disable-smart-shrinking': None
+				'disable-smart-shrinking': None,
+				'enable-local-file-access': None
 			}
 
-			print(options)
+			#print(options)
 
 			pdfkit.from_file(each, "{}.pdf".format(self.markup_files.index(each)),
 							 options=options)
