@@ -30,8 +30,8 @@ class GetEngine(object):
 
 	def __init__(self, directory):
 		self.html_files = []
-		self.css_files = []
-		self.image_files = []
+		#self.css_files = []
+		#self.image_files = []
 		self.directory = directory
 		self.files = []
 		self.pdf_files = []
@@ -47,17 +47,21 @@ class GetEngine(object):
 		for file in self.html_files:
 			self.pdf_files.append("{}.pdf".format(self.html_files.index(file)))
 
+	"""
 	def get_css(self):
 
 		for file in self.files:
 			if file.endswith(".css"):
 				self.css_files.append(file)
+	"""
 
+	"""
 	def get_images(self):
 
 		for file in self.files:
 			if file.endswith((".png", ".jpg", ".gif")):
 				self.image_files.append(file)
+	"""
 
 	def get_all(self):
 		file = None

@@ -2,6 +2,7 @@ import pdfkit
 import os
 from PyPDF2 import PdfFileMerger
 from PyPDF2.utils import PdfReadError
+from bs4 import BeautifulSoup as bs
 
 
 class PdfEngine(object):
@@ -22,13 +23,27 @@ class PdfEngine(object):
 
 	"""
 
-	def __init__(self, markup_files, style_files, pdf_files, directory):
+	#def __init__(self, markup_files, style_files, pdf_files, directory):
+	def __init__(self, markup_files, pdf_files, directory):
 		self.markup_files = markup_files
-		self.style_files = style_files
+		#self.style_files = style_files
 		self.pdf_files = pdf_files
 		self.directory = directory
 
 	def convert(self):
+		
+		with open(self.markup_files[1]) as fp:
+			first_html = bs(fp, 'html.parser')
+		
+		viewport_str = first_html.find("meta", {"name":"viewport"})['content']
+		viewport_str_arr = viewport_str.split(',')
+		viewport = {}
+		for view_str in viewport_str_arr:
+			name, val = view_str.split('=')
+			viewport[name.strip()]= val.strip()
+
+		print(viewport)
+
 		for each in self.markup_files:
 
 			# Prevent conversion process from showing terminal updates
@@ -45,15 +60,17 @@ class PdfEngine(object):
 			# 641/96*25,4 = 169.5979166667mm
 			options = {
 				'quiet': None,
-				'viewport-size': '641x908',
-				'page-width': '643px',
-				'page-height': '910px',
+				'viewport-size': viewport['width']+'x'+viewport['height'],
+				'page-width': str(int(viewport['width'])+2)+'px',
+				'page-height': str(int(viewport['height'])+2)+'px',
 				'margin-bottom': '0',
 				'margin-left': '0',
 				'margin-right': '0',
 				'margin-top': '0',
 				'disable-smart-shrinking': None
 			}
+
+			#print(options)
 
 			pdfkit.from_file(each, "{}.pdf".format(self.markup_files.index(each)),
 							 options=options)
