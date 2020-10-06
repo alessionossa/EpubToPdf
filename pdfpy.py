@@ -47,6 +47,7 @@ class PdfEngine(object):
 		print(viewport)
 
 		for each in self.markup_files:
+			print('Converting ' + str(each))
 
 			# Prevent conversion process from showing terminal updates
 
