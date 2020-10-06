@@ -15,13 +15,15 @@ def process():
 		file.get_directory()
 		file.extract_zip()
 		engine = GetEngine(file.directory)
-		engine.get_all()
-		engine.get_html()
+		#engine.get_all()
+		#engine.get_html()
+		engine.get_pages()
 		engine.get_pdf()
 		#engine.get_css()
 		#engine.get_images()
 		#pdf = PdfEngine(engine.html_files, engine.css_files,
-		pdf = PdfEngine(engine.html_files,
+						#engine.pdf_files, file.directory)
+		pdf = PdfEngine(engine.pages,
 						engine.pdf_files, file.directory)
 		pdf.convert()
 		pdf.combine()

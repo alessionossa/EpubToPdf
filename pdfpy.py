@@ -25,6 +25,7 @@ class PdfEngine(object):
 
 	#def __init__(self, markup_files, style_files, pdf_files, directory):
 	def __init__(self, markup_files, pdf_files, directory):
+	#def __init__(self, markup_files, directory):
 		self.markup_files = markup_files
 		#self.style_files = style_files
 		self.pdf_files = pdf_files

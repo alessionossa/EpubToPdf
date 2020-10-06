@@ -29,23 +29,29 @@ class GetEngine(object):
 	"""
 
 	def __init__(self, directory):
-		self.html_files = []
+		#self.html_files = []
 		#self.css_files = []
 		#self.image_files = []
 		self.directory = directory
-		self.files = []
+		#self.files = []
 		self.pdf_files = []
 
+		self.pages = []
+
+	"""
 	def get_html(self):
 
 		for file in self.files:
 			if file.endswith(".xhtml") or file.endswith(".html"):
 				self.html_files.append(file)
+	"""
 
 	def get_pdf(self):
 
-		for file in self.html_files:
-			self.pdf_files.append("{}.pdf".format(self.html_files.index(file)))
+		#for file in self.html_files:
+		#	self.pdf_files.append("{}.pdf".format(self.html_files.index(file)))
+		for file in self.pages:
+			self.pdf_files.append("{}.pdf".format(self.pages.index(file)))
 
 	"""
 	def get_css(self):
@@ -63,6 +69,7 @@ class GetEngine(object):
 				self.image_files.append(file)
 	"""
 
+	"""
 	def get_all(self):
 		file = None
 		directory_paths = []
@@ -99,3 +106,44 @@ class GetEngine(object):
 				filepath = path + '/' + file_name
 				if os.path.exists(filepath):
 					self.files.append(filepath)
+	"""
+
+	def get_pages(self):
+		file = None
+		directory_paths = []
+		for root, dirs, files in os.walk(self.directory):
+			#This traverses the directory passed in as an argument,
+			#returns the current directory, the sub directories and all the files
+			directory_paths.append(root)
+			if file:
+				continue
+			for each in files:
+				if each.endswith(".ncx"):
+					file = os.path.join(root, each)
+					continue
+		if not file:
+			return
+
+		xml_content = open(file, "r").read()
+
+		xml_tree = bs(xml_content, features = "xml")
+
+		page_targets = xml_tree.ncx.pageList.findAll('pageTarget')
+
+		# Gets the name of all the documents in order
+		# from the opf file, then saves the file name with its path
+		# The file path in the opf file can't be relied upon
+		# Hence, the need to extract file name and get its path
+
+		for page_target in page_targets:
+			page_src = page_target.find('content')['src']
+			
+			file_path_match = re.match(r'.+\.[a-zA-Z]+', page_src)
+			print(page_src + ';' + str(file_path_match))
+			if not file_path_match:
+				continue
+			file_name = ntpath.basename(file_path_match.group())
+			for path in directory_paths:
+				filepath = path + '/' + file_name
+				if os.path.exists(filepath):
+					self.pages.append(filepath)
