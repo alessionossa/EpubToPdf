@@ -133,27 +133,20 @@ class PdfEngine(object):
 		xml_tree = bs(xml_content, features = "xml")
 
 		parentnodes = xml_tree.tocxml.toc.findAll('node', recursive=False)
-		print('Parent nodes:')
-		print(parentnodes)
-		print('Ended nodes.')
+
 		self.addOutlineNodes(merger, parentnodes)
 		
 
 	def addOutlineNodes(self, merger, nodes, parent=None):
 		for node in nodes:
-			print('Adding node:')
-			print(node)
 			title = node['title']
 			pagenum_str = re.search(r'[a-zA-Z]([0-9]+)\.xhtml', node['href']).group(1)
 			pagenum = int(pagenum_str) - 1
-			print(title + ';' + pagenum_str + ';' + str(parent))
+			
 			bookmark = merger.addBookmark(title, pagenum, parent)
 
 			children = node.findAll('node', recursive=False)
 			if len(children) > 0:
-				print('Child nodes:')
-				print(children)
-				print('Ended child nodes.')
 				self.addOutlineNodes(merger, children, bookmark)
 
 	def del_pdf(self):
