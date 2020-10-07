@@ -149,9 +149,12 @@ class PdfEngine(object):
 			print(title + ';' + pagenum_str + ';' + str(parent))
 			bookmark = merger.addBookmark(title, pagenum, parent)
 
-			if node.findAll('node', recursive=False):
-				print('Content')
-				self.addOutlineNodes(merger, node.contents, bookmark)
+			children = node.findAll('node', recursive=False)
+			if len(children) > 0:
+				print('Child nodes:')
+				print(parentnodes)
+				print('Ended child nodes.')
+				self.addOutlineNodes(merger, children, bookmark)
 
 	def del_pdf(self):
 			for each in self.pdf_files:
