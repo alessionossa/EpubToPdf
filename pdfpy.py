@@ -86,7 +86,8 @@ class PdfEngine(object):
 				'margin-right': '0',
 				'margin-top': '0',
 				'disable-smart-shrinking': None,
-				'enable-local-file-access': None
+				'enable-local-file-access': None,
+				'load-error-handling': 'ignore'
 			}
 
 			#print(options)
@@ -131,12 +132,15 @@ class PdfEngine(object):
 		xml_tree = bs(xml_content, features = "xml")
 
 		parentnodes = xml_tree.tocxml.toc.findAll('node', recursive=False)
+		print('Parent nodes:')
 		print(parentnodes)
+		print('Ended nodes.')
 		self.addOutlineNodes(merger, parentnodes)
 		
 
 	def addOutlineNodes(self, merger, nodes, parent=None):
 		for node in nodes:
+			print('Adding node:')
 			print(node)
 			title = node['title']
 			pagenum_str = re.search(r'[a-zA-Z]([0-9]+)\.xhtml', node['href']).group(1)
@@ -144,7 +148,7 @@ class PdfEngine(object):
 			print(title + ';' + pagenum_str + ';' + str(parent))
 			bookmark = merger.addBookmark(title, pagenum, parent)
 
-			if node.contents:
+			if node.findAll('node', recursive=False):
 				print('Content')
 				self.addOutlineNodes(merger, node.contents, bookmark)
 
