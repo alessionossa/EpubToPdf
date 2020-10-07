@@ -152,7 +152,7 @@ class PdfEngine(object):
 			children = node.findAll('node', recursive=False)
 			if len(children) > 0:
 				print('Child nodes:')
-				print(parentnodes)
+				print(children)
 				print('Ended child nodes.')
 				self.addOutlineNodes(merger, children, bookmark)
 
